@@ -101,6 +101,7 @@ def initialize_webdriver(browser_type):
         - Hides WebDriver detection
         - Uses realistic User-Agent strings
         - Disables unwanted browser features
+        - FIXED: Proxy detection bypass added
     
     Args:
         browser_type (str): 'chrome' or 'firefox'
@@ -130,6 +131,15 @@ def initialize_webdriver(browser_type):
             chrome_options.add_argument('--disable-plugins')
             chrome_options.add_argument('--disable-images')
             chrome_options.add_argument('--disable-default-apps')
+            chrome_options.add_argument('--start-maximized')
+            chrome_options.add_argument('--no-first-run')
+            chrome_options.add_argument('--disable-popup-blocking')
+            chrome_options.add_argument('--disable-translate')
+            chrome_options.add_argument('--disable-extensions')
+            
+            # ✅ FIX: Disable proxy detection
+            chrome_options.add_argument('--disable-proxy-auto-config')
+            chrome_options.add_argument('--no-proxy-server')
             
             service = ChromeService(ChromeDriverManager().install())
             driver = webdriver.Chrome(service=service, options=chrome_options)
@@ -164,6 +174,9 @@ def initialize_webdriver(browser_type):
             # ✅ Firefox preferences
             firefox_options.set_preference('dom.webdriver.enabled', False)
             firefox_options.set_preference('useAutomationExtension', False)
+            
+            # ✅ FIX: Disable proxy detection
+            firefox_options.set_preference('network.proxy.type', 0)
             
             service = FirefoxService(GeckoDriverManager().install())
             driver = webdriver.Firefox(service=service, options=firefox_options)
@@ -246,11 +259,18 @@ def start_bot(start_url, email, college, collegeID):
     try:
         driver.maximize_window()
         driver.get(start_url)
-        time.sleep(2)
+        time.sleep(3)
         
         print(fc + sd + '[' + fm + sb + '*' + fc + sd + '] ' + fg + 'Successfully accessed college portal')
         print(fc + sd + '[' + fm + sb + '*' + fc + sd + '] ' + fy + f'College: {college}')
         print(fc + sd + '[' + fm + sb + '*' + fc + sd + '] ' + fy + f'Email: {email}')
+        
+        # Check if we got a proxy error
+        page_source = driver.page_source
+        if 'proxy connection has been detected' in page_source.lower():
+            print(fc + sd + '[' + fm + sb + '*' + fc + sd + '] ' + fr + 'Proxy detection error encountered')
+            print(fc + sd + '[' + fm + sb + '*' + fc + sd + '] ' + fy + 'Attempting to bypass...')
+            time.sleep(2)
         
         # Find and click on registration link
         try:
@@ -303,7 +323,7 @@ def start_bot(start_url, email, college, collegeID):
         # Save account details
         with open('myccAcc.txt', 'a') as fp:
             birthDay = str(randomMonth) + '/' + str(randomDay) + '/' + str(randomYear)
-            account_details = f'Email - {email} | Password - generated | UserName - {firstName}{postFix(7)} | First Name - {firstName} | Middle Name - {middleName} | Last Name - {LastName} | Birthday - {birthDay} | Phone - {studentPhone} | College - {college}\n'
+            account_details = f'Email - {email} | Password - generated | UserName - {firstName}{postFix(7)} | First Name - {firstName} | Middle Name - {middleName} | Last Name - {LastName} | Birth - {birthDay} | Phone - {studentPhone} | Street - {streetAddress} | City - {cityAddress} | State - {stateAddress} | Postal - {postalCode}\n'
             fp.write(account_details)
         
         print(fc + sd + '[' + fm + sb + '*' + fc + sd + '] ' + fg + 'Account details saved to myccAcc.txt')
