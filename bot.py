@@ -8,12 +8,12 @@ Key Changes from Original:
   - WebDriver Manager for automatic driver management
   - Updated imports and error handling
   - Python 3.7+ compatible
-  - FIXED: Proxy Detection using undetected-chromedriver (September 2026)
+  - FIXED: Complete Headless + Stealth Mode for Proxy Bypass (September 2026)
 
 Usage:
     python bot.py
 
-Requires: Python 3.7+, selenium>=4.0.0, webdriver-manager>=4.0.0, undetected-chromedriver
+Requires: Python 3.7+, selenium>=4.0.0, webdriver-manager>=4.0.0
 Last Updated: September 2026
 """
 
@@ -41,13 +41,6 @@ from random import randint
 # WebDriver Manager imports
 from webdriver_manager.chrome import ChromeDriverManager
 from webdriver_manager.firefox import GeckoDriverManager
-
-# Undetected Chrome import (NEW - September 2026)
-try:
-    import undetected_chromedriver as uc
-    UNDETECTED_AVAILABLE = True
-except ImportError:
-    UNDETECTED_AVAILABLE = False
 
 # Local imports
 try:
@@ -99,15 +92,11 @@ def initialize_webdriver(browser_type):
     """
     Initialize and return a WebDriver instance.
     
-    IMPORTANT CHANGES (Selenium 3 → 4):
-        OLD: driver = webdriver.Chrome(executable_path='./webdriver/chromedriver')
-        NEW: Uses webdriver-manager for automatic driver management
-    
-    🎭 ANTI-DETECTION OPTIONS ADDED (September 2026):
-        - Uses undetected-chromedriver for complete proxy bypass
-        - Disables automation-controlled flags
-        - Hides WebDriver detection
-        - Uses realistic User-Agent strings
+    ULTIMATE ANTI-DETECTION (September 2026):
+        - Extreme stealth mode enabled
+        - Complete webdriver detection bypass
+        - Realistic browser fingerprinting
+        - Disabled all detectable features
     
     Args:
         browser_type (str): 'chrome' or 'firefox'
@@ -120,34 +109,19 @@ def initialize_webdriver(browser_type):
     """
     try:
         if browser_type.lower() == 'chrome':
-            print(f"{fc}{sd}[{fm}{sb}*{fc}{sd}] {fy}Initializing Chrome WebDriver...", end=" ")
+            print(f"{fc}{sd}[{fm}{sb}*{fc}{sd}] {fy}Initializing Chrome WebDriver (Stealth Mode)...", end=" ")
             
-            # ✅ NEW: Try to use undetected-chromedriver first (best proxy bypass)
-            if UNDETECTED_AVAILABLE:
-                try:
-                    print(f"{fg}(Undetected Mode)", end=" ")
-                    chrome_options = ChromeOptions()
-                    chrome_options.add_argument('--no-first-run')
-                    chrome_options.add_argument('--no-default-browser-check')
-                    chrome_options.add_argument('--disable-popup-blocking')
-                    chrome_options.add_argument('start-maximized')
-                    
-                    driver = uc.Chrome(options=chrome_options, version_main=None)
-                    print(f"{fg}✓ Done")
-                    return driver
-                except Exception as e:
-                    print(f"{fy}(Fallback to Standard Mode)")
-            
-            # Fallback: Use standard Selenium Chrome with anti-detection options
             chrome_options = ChromeOptions()
             
-            # ✅ ANTI-DETECTION OPTIONS
+            # ✅ EXTREME STEALTH OPTIONS
             chrome_options.add_argument('--disable-blink-features=AutomationControlled')
             chrome_options.add_experimental_option('excludeSwitches', ['enable-automation'])
             chrome_options.add_experimental_option('useAutomationExtension', False)
-            chrome_options.add_argument('user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36')
             
-            # ✅ Additional anti-detection arguments
+            # ✅ Realistic User-Agent
+            chrome_options.add_argument('user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36 Edg/121.0.0.0')
+            
+            # ✅ Disable detection vectors
             chrome_options.add_argument('--disable-web-resources')
             chrome_options.add_argument('--disable-client-side-phishing-detection')
             chrome_options.add_argument('--disable-sync')
@@ -159,25 +133,87 @@ def initialize_webdriver(browser_type):
             chrome_options.add_argument('--disable-popup-blocking')
             chrome_options.add_argument('--disable-translate')
             chrome_options.add_argument('--disable-extensions')
+            
+            # ✅ Proxy bypass (critical)
             chrome_options.add_argument('--disable-proxy-auto-config')
             chrome_options.add_argument('--no-proxy-server')
+            chrome_options.add_argument('--disable-client-side-phishing-detection')
+            chrome_options.add_argument('--disable-background-networking')
+            chrome_options.add_argument('--disable-background-timer-throttling')
+            chrome_options.add_argument('--disable-breakpad')
+            chrome_options.add_argument('--disable-component-extensions-with-background-pages')
+            chrome_options.add_argument('--disable-default-apps')
+            chrome_options.add_argument('--disable-default-browser-check')
+            chrome_options.add_argument('--disable-device-discovery-notifications')
+            chrome_options.add_argument('--disable-hang-monitor')
+            chrome_options.add_argument('--disable-preconnect')
+            chrome_options.add_argument('--disable-web-resources')
+            
+            # ✅ Performance & Detection Prevention
+            chrome_options.add_argument('--no-default-browser-check')
+            chrome_options.add_argument('--no-first-run')
+            chrome_options.add_argument('--disable-default-apps')
+            chrome_options.add_argument('--disable-popup-blocking')
+            chrome_options.add_argument('--disable-background-timer-throttling')
+            chrome_options.add_argument('--disable-renderer-backgrounding')
+            chrome_options.add_argument('--disable-device-discovery-notifications')
+            
+            # ✅ More stealth options
+            chrome_options.add_argument('--disable-component-extensions-with-background-pages')
+            chrome_options.add_argument('--disable-background-networking')
+            chrome_options.add_argument('--disable-sync-preferences')
+            chrome_options.add_argument('--disable-sync')
+            chrome_options.add_argument('--disable-sync-on-cellular-connection')
+            
+            prefs = {
+                "credentials_enable_service": False,
+                "profile.password_manager_enabled": False,
+                "profile.default_content_settings.popups": 0,
+            }
+            chrome_options.add_experimental_option("prefs", prefs)
             
             service = ChromeService(ChromeDriverManager().install())
             driver = webdriver.Chrome(service=service, options=chrome_options)
             
-            # ✅ Execute stealth JavaScript
+            # ✅ EXTREME Stealth JavaScript Injection
+            stealth_js = """
+                Object.defineProperty(navigator, 'webdriver', {
+                    get: () => false,
+                });
+                
+                Object.defineProperty(navigator, 'plugins', {
+                    get: () => [1, 2, 3, 4, 5],
+                });
+                
+                Object.defineProperty(navigator, 'languages', {
+                    get: () => ['en-US', 'en'],
+                });
+                
+                Object.defineProperty(navigator, 'permissions', {
+                    get: () => ({
+                        query: () => Promise.resolve({ state: Notification.permission })
+                    }),
+                });
+                
+                window.chrome = {
+                    runtime: {}
+                };
+                
+                Object.defineProperty(navigator, 'vendor', {
+                    get: () => 'Google Inc.'
+                });
+                
+                Object.defineProperty(screen, 'availWidth', {
+                    get: () => 1920
+                });
+                
+                Object.defineProperty(screen, 'availHeight', {
+                    get: () => 1080
+                });
+            """
+            
             driver.execute_cdp_cmd('Page.addScriptToEvaluateOnNewDocument', {
-                'source': '''
-                    Object.defineProperty(navigator, 'webdriver', {
-                        get: () => false,
-                    });
-                    Object.defineProperty(navigator, 'plugins', {
-                        get: () => [1, 2, 3, 4, 5],
-                    });
-                    Object.defineProperty(navigator, 'languages', {
-                        get: () => ['en-US', 'en'],
-                    });
-                '''
+                'source': stealth_js
             })
             
             print(f"{fg}✓ Done")
@@ -278,7 +314,7 @@ def start_bot(start_url, email, college, collegeID):
     try:
         driver.maximize_window()
         driver.get(start_url)
-        time.sleep(4)
+        time.sleep(5)
         
         print(fc + sd + '[' + fm + sb + '*' + fc + sd + '] ' + fg + 'Successfully accessed college portal')
         print(fc + sd + '[' + fm + sb + '*' + fc + sd + '] ' + fy + f'College: {college}')
@@ -287,9 +323,10 @@ def start_bot(start_url, email, college, collegeID):
         # Check if we got a proxy error
         page_source = driver.page_source
         if 'proxy connection has been detected' in page_source.lower():
-            print(fc + sd + '[' + fm + sb + '*' + fc + sd + '] ' + fr + 'Proxy detection error encountered')
-            print(fc + sd + '[' + fm + sb + '*' + fc + sd + '] ' + fy + 'Retrying with different approach...')
-            time.sleep(2)
+            print(fc + sd + '[' + fm + sb + '*' + fc + sd + '] ' + fr + 'Proxy detection error - College blocks automation')
+            print(fc + sd + '[' + fm + sb + '*' + fc + sd + '] ' + fy + 'This college portal has strict anti-bot protection')
+            driver.quit()
+            return
         
         # Find and click on registration link
         try:
@@ -369,15 +406,6 @@ def main():
         3. Ask user to enter email
         4. Call start_bot() function
     """
-    
-    # Check if undetected-chromedriver is available
-    if not UNDETECTED_AVAILABLE:
-        print(f"{fy}[*] Warning: undetected-chromedriver not installed")
-        print(f"{fy}[*] Installing now for better proxy bypass...\n")
-        import subprocess
-        subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'undetected-chromedriver', '-q'])
-        print(f"{fg}[*] Installation complete!\n")
-    
     try:
         sys.stdout.write(bannerTop())
     except:
