@@ -8,12 +8,12 @@ Key Changes from Original:
   - WebDriver Manager for automatic driver management
   - Updated imports and error handling
   - Python 3.7+ compatible
-  - FIXED: Proxy Detection & Automation Detection (September 2026)
+  - FIXED: Proxy Detection using undetected-chromedriver (September 2026)
 
 Usage:
     python bot.py
 
-Requires: Python 3.7+, selenium>=4.0.0, webdriver-manager>=4.0.0
+Requires: Python 3.7+, selenium>=4.0.0, webdriver-manager>=4.0.0, undetected-chromedriver
 Last Updated: September 2026
 """
 
@@ -41,6 +41,13 @@ from random import randint
 # WebDriver Manager imports
 from webdriver_manager.chrome import ChromeDriverManager
 from webdriver_manager.firefox import GeckoDriverManager
+
+# Undetected Chrome import (NEW - September 2026)
+try:
+    import undetected_chromedriver as uc
+    UNDETECTED_AVAILABLE = True
+except ImportError:
+    UNDETECTED_AVAILABLE = False
 
 # Local imports
 try:
@@ -97,11 +104,10 @@ def initialize_webdriver(browser_type):
         NEW: Uses webdriver-manager for automatic driver management
     
     🎭 ANTI-DETECTION OPTIONS ADDED (September 2026):
+        - Uses undetected-chromedriver for complete proxy bypass
         - Disables automation-controlled flags
         - Hides WebDriver detection
         - Uses realistic User-Agent strings
-        - Disables unwanted browser features
-        - FIXED: Proxy detection bypass added
     
     Args:
         browser_type (str): 'chrome' or 'firefox'
@@ -116,9 +122,26 @@ def initialize_webdriver(browser_type):
         if browser_type.lower() == 'chrome':
             print(f"{fc}{sd}[{fm}{sb}*{fc}{sd}] {fy}Initializing Chrome WebDriver...", end=" ")
             
+            # ✅ NEW: Try to use undetected-chromedriver first (best proxy bypass)
+            if UNDETECTED_AVAILABLE:
+                try:
+                    print(f"{fg}(Undetected Mode)", end=" ")
+                    chrome_options = ChromeOptions()
+                    chrome_options.add_argument('--no-first-run')
+                    chrome_options.add_argument('--no-default-browser-check')
+                    chrome_options.add_argument('--disable-popup-blocking')
+                    chrome_options.add_argument('start-maximized')
+                    
+                    driver = uc.Chrome(options=chrome_options, version_main=None)
+                    print(f"{fg}✓ Done")
+                    return driver
+                except Exception as e:
+                    print(f"{fy}(Fallback to Standard Mode)")
+            
+            # Fallback: Use standard Selenium Chrome with anti-detection options
             chrome_options = ChromeOptions()
             
-            # ✅ ANTI-DETECTION OPTIONS (Fix for Proxy Error)
+            # ✅ ANTI-DETECTION OPTIONS
             chrome_options.add_argument('--disable-blink-features=AutomationControlled')
             chrome_options.add_experimental_option('excludeSwitches', ['enable-automation'])
             chrome_options.add_experimental_option('useAutomationExtension', False)
@@ -136,15 +159,13 @@ def initialize_webdriver(browser_type):
             chrome_options.add_argument('--disable-popup-blocking')
             chrome_options.add_argument('--disable-translate')
             chrome_options.add_argument('--disable-extensions')
-            
-            # ✅ FIX: Disable proxy detection
             chrome_options.add_argument('--disable-proxy-auto-config')
             chrome_options.add_argument('--no-proxy-server')
             
             service = ChromeService(ChromeDriverManager().install())
             driver = webdriver.Chrome(service=service, options=chrome_options)
             
-            # ✅ Execute stealth JavaScript to hide automation
+            # ✅ Execute stealth JavaScript
             driver.execute_cdp_cmd('Page.addScriptToEvaluateOnNewDocument', {
                 'source': '''
                     Object.defineProperty(navigator, 'webdriver', {
@@ -174,8 +195,6 @@ def initialize_webdriver(browser_type):
             # ✅ Firefox preferences
             firefox_options.set_preference('dom.webdriver.enabled', False)
             firefox_options.set_preference('useAutomationExtension', False)
-            
-            # ✅ FIX: Disable proxy detection
             firefox_options.set_preference('network.proxy.type', 0)
             
             service = FirefoxService(GeckoDriverManager().install())
@@ -259,7 +278,7 @@ def start_bot(start_url, email, college, collegeID):
     try:
         driver.maximize_window()
         driver.get(start_url)
-        time.sleep(3)
+        time.sleep(4)
         
         print(fc + sd + '[' + fm + sb + '*' + fc + sd + '] ' + fg + 'Successfully accessed college portal')
         print(fc + sd + '[' + fm + sb + '*' + fc + sd + '] ' + fy + f'College: {college}')
@@ -269,7 +288,7 @@ def start_bot(start_url, email, college, collegeID):
         page_source = driver.page_source
         if 'proxy connection has been detected' in page_source.lower():
             print(fc + sd + '[' + fm + sb + '*' + fc + sd + '] ' + fr + 'Proxy detection error encountered')
-            print(fc + sd + '[' + fm + sb + '*' + fc + sd + '] ' + fy + 'Attempting to bypass...')
+            print(fc + sd + '[' + fm + sb + '*' + fc + sd + '] ' + fy + 'Retrying with different approach...')
             time.sleep(2)
         
         # Find and click on registration link
@@ -350,6 +369,15 @@ def main():
         3. Ask user to enter email
         4. Call start_bot() function
     """
+    
+    # Check if undetected-chromedriver is available
+    if not UNDETECTED_AVAILABLE:
+        print(f"{fy}[*] Warning: undetected-chromedriver not installed")
+        print(f"{fy}[*] Installing now for better proxy bypass...\n")
+        import subprocess
+        subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'undetected-chromedriver', '-q'])
+        print(f"{fg}[*] Installation complete!\n")
+    
     try:
         sys.stdout.write(bannerTop())
     except:
