@@ -1,0 +1,27 @@
+# EduMail Generator 2026 - Python Dependencies
+# ================================================
+# This file specifies all required Python packages and their versions
+# for the EduMail Generator project.
+#
+# Installation:
+#     pip install -r requirements.txt
+#
+# Python Version: 3.7+
+# Last Updated: September 2026
+
+# WEB & HTTP UTILITIES
+requests>=2.28.0
+
+# DATA GENERATION & FAKER
+faker>=8.0.0
+
+# BROWSER AUTOMATION - SELENIUM
+# IMPORTANT: Version 4.x (NOT 3.x)
+selenium>=4.0.0
+
+# TERMINAL & DISPLAY
+colorama>=0.4.0
+
+# WEBDRIVER MANAGEMENT (NEW - 2026)
+# Automatic WebDriver (ChromeDriver, GeckoDriver) management
+webdriver-manager>=4.0.0
