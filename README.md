@@ -1,6 +1,6 @@
 # 🎓 EduMail Generator 2026
 
-**Advanced College Application Form Automation** — Fully compatible with Python 3.11+ and Selenium 4.x
+**Advanced Student Account Generator** — Fully compatible with Python 3.7+ and Selenium 4.x
 
 > ⚠️ **DISCLAIMER**: This tool is for **educational purposes only**. Use at your own risk. The authors are not responsible for any misuse or damage caused by this application.
 
@@ -10,7 +10,6 @@
 
 - [Overview](#overview)
 - [Key Features](#key-features)
-- [What's New in 2026](#whats-new-in-2026)
 - [System Requirements](#system-requirements)
 - [Installation](#installation)
 - [Setup](#setup)
@@ -18,96 +17,57 @@
 - [Project Structure](#project-structure)
 - [Configuration](#configuration)
 - [Troubleshooting](#troubleshooting)
+- [Recent Updates](#recent-updates)
 - [License](#license)
 
 ---
 
 ## 🎯 Overview
 
-**EduMail Generator 2026** is an automated college application form filling system that uses Selenium WebDriver to interact with web-based college registration portals. It automates:
+**EduMail Generator 2026** is an automated student account generator that creates realistic fake student data with beautiful formatted output. It supports:
 
-- ✅ Account creation (3-page form)
-- ✅ Application form submission (8-page form)
-- ✅ Personal information entry
-- ✅ Education history
-- ✅ Demographics and preferences
-- ✅ Application submission
+- ✅ 10+ Universities/Colleges worldwide
+- ✅ Auto-generates realistic student data (Faker library)
+- ✅ Beautiful account information display
+- ✅ Multiple email domain support (.edu, .ac.bd, .ac.uk, .edu.au, .ca)
+- ✅ Comprehensive student information generation
+- ✅ File export with timestamp
 
 ### Use Cases
-- Batch testing college portals
-- Integration testing for educational institutions
-- Form validation automation
-- Load testing college registration systems
+- Testing educational platforms
+- Generating sample student data
+- Database population for testing
+- Educational demonstrations
 
 ---
 
 ## ⭐ Key Features
 
 ### 🤖 Fully Automated Workflow
-- Automatically fills college application forms
-- Handles multi-page forms seamlessly
+- Automatically generates student accounts
 - Generates realistic fake student data
-- Validates and retries failed fields
+- Validates and formats all fields
+- Beautiful terminal output
 
-### 🌐 Multi-Browser Support
-- Chrome browser automation
-- Firefox browser automation
-- Automatic WebDriver management (no manual downloads needed)
-
-### 🔐 Advanced Form Handling
-- Handles dropdown selections
-- Manages radio buttons and checkboxes
-- Fills text inputs with realistic data
-- Handles address validation and corrections
-- Processes security questions
-- CAPTCHA waiting mechanism
+### 🌐 Multi-University Support
+- Harvard University (MIT, Stanford, etc.)
+- UK Universities (Oxford, Cambridge)
+- Canadian Universities (Toronto)
+- Australian Universities (Melbourne)
+- Bangladeshi Universities (BUET, Dhaka, North South)
 
 ### 📊 Data Generation
 - Random phone number generation
 - Realistic name generation (via Faker)
 - Address parsing and formatting
 - Birth date generation
+- Student IDs, Roll numbers, Admission numbers
 
 ### 🎨 User-Friendly Interface
-- Colored terminal output
+- Colored terminal output with ANSI codes
 - Progress indicators
-- Detailed logging
-- Interactive college selection
-
----
-
-## 🆕 What's New in 2026
-
-### Major Updates from Original Version
-
-#### 1️⃣ **Selenium 4.x API Migration**
-```python
-# OLD (Selenium 3.x) - DEPRECATED
-driver.find_element_by_id(\"id\")
-driver.find_element_by_xpath(\"xpath\")
-driver.find_element_by_class_name(\"class\")
-
-# NEW (Selenium 4.x) - CURRENT STANDARD
-from selenium.webdriver.common.by import By
-driver.find_element(By.ID, \"id\")
-driver.find_element(By.XPATH, \"xpath\")
-driver.find_element(By.CLASS_NAME, \"class\")
-```
-
-#### 2️⃣ **Automatic WebDriver Management**
-**Problem (2024)**: `chromedriver.storage.googleapis.com` was **shut down**, breaking manual driver management.
-
-**Solution (2026)**: Using `webdriver-manager` for automatic driver detection and download.
-
-#### 3️⃣ **Python 3.11+ Compatibility**
-- All code follows Python 3.11+ standards
-- No deprecated libraries
-- Cross-platform support
-
-#### 4️⃣ **Cross-Platform WebDriver Support**
-- ✅ Windows (32/64-bit)
-- ✅ macOS (Intel/Apple Silicon)
-- ✅ Linux (all distributions)
+- Interactive university selection
+- Detailed formatted output
 
 ---
 
@@ -117,20 +77,16 @@ driver.find_element(By.CLASS_NAME, \"class\")
 - **Python**: 3.7+ (Tested on 3.11+)
 - **OS**: Windows, macOS, or Linux
 - **RAM**: 2GB minimum
-- **Disk Space**: 500MB (including WebDriver cache)
-- **Internet**: Required for driver downloads
-
-### Browser Requirements
-- **Chrome**: v90+ installed
-- **Firefox**: v88+ installed
+- **Disk Space**: 500MB
+- **Internet**: Required for initial setup
 
 ### Python Packages
 ```
-selenium>=4.0.0
-webdriver-manager>=4.0.0
 faker>=8.0.0
 requests>=2.28.0
+selenium>=4.0.0
 colorama>=0.4.0
+webdriver-manager>=4.0.0
 ```
 
 ---
@@ -139,7 +95,7 @@ colorama>=0.4.0
 
 ### Step 1: Clone the Repository
 ```bash
-git clone https://github.com/mywebsidedata/EduMail-Generator-2026.git
+git clone https://github.com/so9810102/EduMail-Generator-2026.git
 cd EduMail-Generator-2026
 ```
 
@@ -165,9 +121,8 @@ python setup.py
 
 This script will:
 1. ✅ Install all required Python packages
-2. ✅ Detect installed browsers (Chrome/Firefox)
-3. ✅ Ask you to select your preferred browser
-4. ✅ Save preferences to `prefBrowser.txt`
+2. ✅ Create necessary directory structure
+3. ✅ Test browser compatibility (if needed)
 
 ---
 
@@ -180,20 +135,43 @@ python bot.py
 
 ### Interactive Flow
 ```
-[*] Select a college from all available colleges to proceed....
+════════════════════════════════════════════════════════════
+              🎓 EduMail Generator 2026
+════════════════════════════════════════════════════════════
 
-[*] 1 - College of Science & Engineering
-[*] 2 - College of Liberal Arts
-[*] 3 - College of Business Administration
-[*] 4 - College of Medicine & Health Sciences
+[*] Select a University/College to generate student account...
 
-[*] Enter college id for ex - 1 or 2 or 3.... : 1
+[*] 1. Harvard University (harvard.edu)
+[*] 2. MIT (mit.edu)
+[*] 3. Stanford University (stanford.edu)
+[*] 4. University of Oxford (ox.ac.uk)
+[*] 5. University of Cambridge (cam.ac.uk)
+[*] 6. University of Toronto (utoronto.ca)
+[*] 7. University of Melbourne (unimelb.edu.au)
+[*] 8. BUET (buet.ac.bd)
+[*] 9. University of Dhaka (du.ac.bd)
+[*] 10. North South University (northsouth.edu)
 
-[*] Selected College: College of Science & Engineering
+[*] Enter university number (1-10): 3
 
-[*] Enter Your Email: student@example.com
+[*] Selected: Stanford University
 
-[*] Hold on Starting now, Keep checking this terminal for instructions
+[*] Generating student account...
+
+════════════════════════════════════════════════════════════
+              🎓 STUDENT ACCOUNT INFORMATION
+════════════════════════════════════════════════════════════
+
+🔐 ACCOUNT INFORMATION
+────────────────────────────────────────────────────────────
+Student Email      : john1234@stanford.edu
+Username           : john1234567890
+Password           : [Auto-generated]
+Account Status     : Active ✓
+
+[... More account details ...]
+
+✓ Account saved to: student_account_1694520000.txt
 ```
 
 ---
@@ -205,104 +183,101 @@ EduMail-Generator-2026/
 ├── bot.py                          # Main bot script
 ├── setup.py                        # Setup and configuration script
 ├── requirements.txt                # Python dependencies
-├── README.md                       # This file
-├── prefBrowser.txt                 # Browser preference (auto-generated)
-├── myccAcc.txt                     # Account details (auto-generated)
+├── README.md                       # Documentation (this file)
 │
-├── __banner/                       # Terminal banner
-│   └── myBanner.py                # Banner display
+├── __banner/                       # Terminal banner display
+│   ├── __init__.py                # Module initialization
+│   └── myBanner.py                # Banner display functions
 │
 ├── __colors__/                     # Terminal color codes
-│   └── colors.py                  # Color constants for output
+│   ├── __init__.py                # Module initialization
+│   └── colors.py                  # ANSI color definitions
 │
 ├── __constants/                    # Constants and configuration
-│   └── const.py                   # College info, student data, URLs
+│   ├── __init__.py                # Module initialization
+│   └── const.py                   # Universities, student data, constants
 │
-└── __dwnldDrivers/                 # WebDriver management
-    └── versions.py                # Browser detection & driver setup
+└── __dwnldDrivers/                 # WebDriver management (legacy)
+    ├── __init__.py                # Module initialization
+    └── versions.py                # Browser version detection
 ```
 
 ---
 
 ## ⚙️ Configuration
 
-### Modify College Information
-Edit `__constants/const.py`:
+### Add or Modify Universities
+Edit `__constants/const.py` and add to `universities_db`:
+
 ```python
-allColleges = [
-    \"College A\",
-    \"College B\",
-    \"College C\",
-    \"College D\"
-]
+universities_db = {
+    # Existing entries...
+    11: {
+        "name": "Your University Name",
+        "domain": "youruniversity.edu",
+        "country": "Country Name",
+        "state": "State/Province",
+        "city": "City Name",
+        "departments": ["Department1", "Department2", "Department3"],
+        "degrees": ["Bachelor's", "Master's", "PhD"],
+    },
+}
+```
 
-clg_ids = [
-    \"?clg=1\",
-    \"?clg=2\",
-    \"?clg=3\",
-    \"?clg=4\"
-]
+### Customize Colors
+Edit `__colors__/colors.py` to change terminal colors:
 
-start_url = \"https://your-college-portal.com/register\"
+```python
+fc = '\033[36m'   # Foreground Cyan
+fg = '\033[32m'   # Foreground Green
+fr = '\033[31m'   # Foreground Red
+# ... more colors
 ```
 
 ---
 
 ## 🐛 Troubleshooting
 
-### Problem: \"No WebDriver found\"
-**Solution**: Run `setup.py` again
+### Problem: "ModuleNotFoundError: No module named 'faker'"
+**Solution**: Install requirements
 ```bash
-python setup.py
+pip install -r requirements.txt
 ```
 
-### Problem: \"Browser not found\"
-**Solution**: Install Chrome or Firefox, then run setup
+### Problem: "Import error from __constants"
+**Solution**: Ensure you're running from repository root
 ```bash
-# On Ubuntu
-sudo apt-get install chromium-browser
-# or
-sudo apt-get install firefox
-
-# On macOS
-brew install google-chrome
-# or
-brew install firefox
+cd EduMail-Generator-2026
+python bot.py
 ```
 
-### Problem: \"Selenium import error\"
-**Solution**: Reinstall Selenium
-```bash
-pip install --upgrade selenium>=4.0.0
-```
-
-### Problem: \"prefBrowser.txt not found\"
-**Solution**: Run setup script first
+### Problem: "No such file or directory: '__banner/myBanner.py'"
+**Solution**: Check directory structure and run setup
 ```bash
 python setup.py
 ```
 
 ---
 
-## 📝 Important Notes
+## 📝 Recent Updates (September 2026)
 
-### Legal & Ethical
-- ⚠️ Only use on **test environments** or with explicit permission
-- ⚠️ Respect **terms of service** of college websites
-- ⚠️ Do not use for actual college fraud
-- ⚠️ This is for **educational testing purposes only**
+### Fixed Issues
+- ✅ **Color codes**: Fixed duplicate ANSI codes (fc, fb were same)
+- ✅ **File consolidation**: Merged universities.py into const.py
+- ✅ **Module exports**: Enhanced __init__.py files for better imports
+- ✅ **Documentation**: Updated with all 10 universities
 
-### Performance
-- Each college application takes **10-15 minutes**
-- WebDriver downloads are cached (~200MB per browser)
-- First run may take longer due to dependencies
-- Subsequent runs are faster
+### Code Quality Improvements
+- ✅ Better ANSI color definitions
+- ✅ Comprehensive constants organization
+- ✅ Enhanced module initialization
+- ✅ Cleaner import structure
 
 ---
 
 ## 📄 License
 
-This project is provided **\"as-is\"** for educational purposes.
+This project is provided **"as-is"** for educational purposes only.
 
 ---
 
@@ -327,15 +302,23 @@ USE AT YOUR OWN RISK AND WITH EXPLICIT PERMISSION FROM INSTITUTIONS.
 
 - [ ] Clone repository
 - [ ] Verify Python 3.7+
-- [ ] Run `python setup.py`
-- [ ] Select browser (Chrome/Firefox)
+- [ ] Run `pip install -r requirements.txt`
 - [ ] Run `python bot.py`
-- [ ] Select college (1-4)
-- [ ] Enter email address
-- [ ] Monitor terminal for instructions
+- [ ] Select university (1-10)
+- [ ] View generated account
+- [ ] Check student_account_*.txt file
 
 ---
 
-**Last Updated**: September 2026  
-**Owner**: mywebsidedata  
-**Repository**: [EduMail-Generator-2026](https://github.com/mywebsidedata/EduMail-Generator-2026)
+## 📧 Support
+
+For issues or questions:
+1. Check the [Troubleshooting](#troubleshooting) section
+2. Review the code comments
+3. Ensure all dependencies are installed
+
+---
+
+**Last Updated**: September 11, 2026  
+**Version**: 2.0 (Fixed & Enhanced)  
+**Repository**: [EduMail-Generator-2026](https://github.com/so9810102/EduMail-Generator-2026)
