@@ -1,4 +1,14 @@
-"""Color codes module for terminal output"""
-from .colors import fc, fg, fr, fy, fb, fm, sd, sb
+"""
+Enhanced __init__.py for colors module
+Imports all ANSI color codes
+"""
 
-__all__ = ['fc', 'fg', 'fr', 'fy', 'fb', 'fm', 'sd', 'sb']
+from .colors import (
+    fc, fg, fr, fy, fb, fm, sd, sb,
+    CYAN, GREEN, RED, YELLOW, BLUE, MAGENTA, DEFAULT, BOLD, RESET
+)
+
+__all__ = [
+    'fc', 'fg', 'fr', 'fy', 'fb', 'fm', 'sd', 'sb',
+    'CYAN', 'GREEN', 'RED', 'YELLOW', 'BLUE', 'MAGENTA', 'DEFAULT', 'BOLD', 'RESET'
+]
