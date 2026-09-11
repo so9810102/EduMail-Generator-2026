@@ -1,8 +1,14 @@
-"""Constants and configuration module"""
+"""
+Enhanced __init__.py for constants module
+Imports from const.py (consolidated module)
+"""
+
 from .const import (
-    start_url,
-    clg_ids,
-    allColleges,
+    universities_db,
+    CAMPUSES,
+    SEMESTERS,
+    GENDERS,
+    NATIONALITIES,
     country_codes,
     firstName,
     LastName,
@@ -12,13 +18,16 @@ from .const import (
     randomYear,
     randomEduMonth,
     randomEduDay,
-    randomEduYear
+    randomEduYear,
+    allColleges
 )
 
 __all__ = [
-    'start_url',
-    'clg_ids',
-    'allColleges',
+    'universities_db',
+    'CAMPUSES',
+    'SEMESTERS',
+    'GENDERS',
+    'NATIONALITIES',
     'country_codes',
     'firstName',
     'LastName',
@@ -28,5 +37,6 @@ __all__ = [
     'randomYear',
     'randomEduMonth',
     'randomEduDay',
-    'randomEduYear'
+    'randomEduYear',
+    'allColleges'
 ]
