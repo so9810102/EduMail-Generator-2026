@@ -6,16 +6,121 @@ import random
 ######## I'm not responsible for any loss or damage ########
 ######## caused to you using this script ########
 
-# College Information
-start_url = 'https://www.opencccapply.net/gateway/apply?cccMisCode='
+# ============================================
+# UNIVERSITIES AND COLLEGES DATABASE
+# ============================================
 
-clg_ids = ['941', '311', '361', '233']
+universities_db = {
+    1: {
+        "name": "Harvard University",
+        "domain": "harvard.edu",
+        "country": "United States",
+        "state": "Massachusetts",
+        "city": "Cambridge",
+        "departments": ["Engineering", "Business", "Medicine", "Law", "Arts & Sciences"],
+        "degrees": ["Bachelor's", "Master's", "PhD"],
+    },
+    2: {
+        "name": "MIT (Massachusetts Institute of Technology)",
+        "domain": "mit.edu",
+        "country": "United States",
+        "state": "Massachusetts",
+        "city": "Cambridge",
+        "departments": ["Engineering", "Science", "Management", "Architecture"],
+        "degrees": ["Bachelor's", "Master's", "PhD"],
+    },
+    3: {
+        "name": "Stanford University",
+        "domain": "stanford.edu",
+        "country": "United States",
+        "state": "California",
+        "city": "Stanford",
+        "departments": ["Engineering", "Business", "Medicine", "Law", "Humanities"],
+        "degrees": ["Bachelor's", "Master's", "PhD"],
+    },
+    4: {
+        "name": "University of Oxford",
+        "domain": "ox.ac.uk",
+        "country": "United Kingdom",
+        "state": "England",
+        "city": "Oxford",
+        "departments": ["Engineering", "Medicine", "Law", "Science", "Humanities"],
+        "degrees": ["Bachelor's", "Master's", "PhD"],
+    },
+    5: {
+        "name": "University of Cambridge",
+        "domain": "cam.ac.uk",
+        "country": "United Kingdom",
+        "state": "England",
+        "city": "Cambridge",
+        "departments": ["Engineering", "Science", "Law", "Medicine", "Humanities"],
+        "degrees": ["Bachelor's", "Master's", "PhD"],
+    },
+    6: {
+        "name": "University of Toronto",
+        "domain": "utoronto.ca",
+        "country": "Canada",
+        "state": "Ontario",
+        "city": "Toronto",
+        "departments": ["Engineering", "Business", "Medicine", "Law"],
+        "degrees": ["Bachelor's", "Master's", "PhD"],
+    },
+    7: {
+        "name": "University of Melbourne",
+        "domain": "unimelb.edu.au",
+        "country": "Australia",
+        "state": "Victoria",
+        "city": "Melbourne",
+        "departments": ["Engineering", "Business", "Law", "Medicine", "Science"],
+        "degrees": ["Bachelor's", "Master's", "PhD"],
+    },
+    8: {
+        "name": "Bangladesh University of Engineering and Technology (BUET)",
+        "domain": "buet.ac.bd",
+        "country": "Bangladesh",
+        "state": "Dhaka",
+        "city": "Dhaka",
+        "departments": ["Civil Engineering", "Electrical Engineering", "Mechanical Engineering", "Chemical Engineering"],
+        "degrees": ["Bachelor's", "Master's", "PhD"],
+    },
+    9: {
+        "name": "University of Dhaka",
+        "domain": "du.ac.bd",
+        "country": "Bangladesh",
+        "state": "Dhaka",
+        "city": "Dhaka",
+        "departments": ["Science", "Arts", "Engineering", "Business", "Law"],
+        "degrees": ["Bachelor's", "Master's", "PhD"],
+    },
+    10: {
+        "name": "North South University",
+        "domain": "northsouth.edu",
+        "country": "Bangladesh",
+        "state": "Dhaka",
+        "city": "Dhaka",
+        "departments": ["Engineering", "Business", "Humanities", "Science"],
+        "degrees": ["Bachelor's", "Master's", "PhD"],
+    },
+}
 
-allColleges = [
-    'MSJC College',
-    'Contra Costa College',
-    'City College',
-    'Sacramento College'
+# Campus Options
+CAMPUSES = [
+    "Main Campus",
+    "Downtown Campus",
+    "North Campus",
+    "Central Campus",
+]
+
+# Semesters
+SEMESTERS = ["Fall", "Spring", "Summer"]
+
+# Gender Options
+GENDERS = ["Male", "Female", "Other"]
+
+# Nationalities
+NATIONALITIES = [
+    "American", "British", "Australian", "Canadian", "Bangladeshi",
+    "Indian", "Chinese", "German", "French", "Japanese"
 ]
 
 # Country codes for phone numbers
@@ -42,22 +147,6 @@ country_codes = [
     '612', '613', '614', '615', '616', '617', '618', '619',
     '620', '623', '626', '628', '630', '631', '636', '641',
     '646', '650', '651', '657', '660', '661', '662', '669',
-    '671', '678', '682', '684', '701', '702', '703', '704',
-    '706', '707', '708', '709', '712', '713', '714', '715',
-    '716', '717', '718', '719', '720', '724', '727', '731',
-    '732', '734', '740', '743', '754', '757', '760', '762',
-    '763', '765', '769', '770', '771', '773', '774', '775',
-    '778', '781', '785', '786', '801', '802', '803', '804',
-    '805', '806', '808', '810', '812', '813', '814', '815',
-    '816', '817', '818', '828', '830', '831', '832', '843',
-    '845', '847', '848', '850', '855', '856', '857', '858',
-    '859', '860', '861', '862', '863', '864', '865', '870',
-    '878', '901', '902', '903', '904', '906', '907', '908',
-    '909', '910', '912', '913', '914', '915', '916', '917',
-    '918', '919', '920', '925', '928', '931', '935', '936',
-    '937', '940', '941', '945', '947', '949', '950', '951',
-    '952', '954', '956', '959', '970', '971', '972', '973',
-    '975', '978', '979', '980', '984', '985', '986', '989'
 ]
 
 # Generate random student data using Faker
