@@ -1,3 +1,14 @@
+"""
+Enhanced Constants and Configuration Module
+EduMail Generator 2026
+Updated: September 2026
+
+This module contains:
+- University database
+- Student data generation
+- Constants and configurations
+"""
+
 from faker import Faker
 import random
 
@@ -7,7 +18,7 @@ import random
 ######## caused to you using this script ########
 
 # ============================================
-# UNIVERSITIES AND COLLEGES DATABASE
+# UNIVERSITIES AND COLLEGES DATABASE (10 TOTAL)
 # ============================================
 
 universities_db = {
@@ -103,7 +114,9 @@ universities_db = {
     },
 }
 
-# Campus Options
+# ============================================
+# CAMPUS OPTIONS
+# ============================================
 CAMPUSES = [
     "Main Campus",
     "Downtown Campus",
@@ -111,19 +124,27 @@ CAMPUSES = [
     "Central Campus",
 ]
 
-# Semesters
+# ============================================
+# SEMESTERS
+# ============================================
 SEMESTERS = ["Fall", "Spring", "Summer"]
 
-# Gender Options
+# ============================================
+# GENDER OPTIONS
+# ============================================
 GENDERS = ["Male", "Female", "Other"]
 
-# Nationalities
+# ============================================
+# NATIONALITIES
+# ============================================
 NATIONALITIES = [
     "American", "British", "Australian", "Canadian", "Bangladeshi",
     "Indian", "Chinese", "German", "French", "Japanese"
 ]
 
-# Country codes for phone numbers
+# ============================================
+# COUNTRY CODES FOR PHONE NUMBERS
+# ============================================
 country_codes = [
     '201', '202', '203', '205', '206', '207', '208', '209',
     '212', '213', '214', '215', '216', '217', '218', '219',
@@ -149,21 +170,33 @@ country_codes = [
     '646', '650', '651', '657', '660', '661', '662', '669',
 ]
 
-# Generate random student data using Faker
+# ============================================
+# GENERATE RANDOM STUDENT DATA USING FAKER
+# ============================================
 fake = Faker('en_US')
 
+# Generate random name
 ex = fake.name().split(' ')
 firstName = ex[0]
 LastName = ex[1] if len(ex) > 1 else 'Doe'
 
+# Generate random address
 studentAddress = fake.address().replace('\n', ', ')
 
-# Random dates
+# Generate random birth dates
 randomMonth = random.randint(1, 12)
 randomDay = random.randint(1, 27)
 randomYear = random.randint(1996, 2005)
 
+# Generate random education dates
 randomEduMonth = random.randint(1, 12)
 randomEduDay = random.randint(1, 27)
 eduYears = [2019, 2020, 2021, 2022, 2023]
 randomEduYear = random.choice(eduYears)
+
+# ============================================
+# LEGACY VARIABLES (For backward compatibility)
+# ============================================
+start_url = ""  # Not used in current version
+clg_ids = []    # Not used in current version
+allColleges = [uni['name'] for uni in universities_db.values()]
