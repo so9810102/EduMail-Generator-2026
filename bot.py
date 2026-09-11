@@ -1,50 +1,42 @@
 """
-EduMail Generator 2026 - Main Bot Script
+EduMail Generator 2026 - Advanced Student Account Generator
 =========================================
-Automates college application form filling process using Selenium 4.x
+Automates student account creation with beautiful formatted output
 
-Key Changes from Original:
-  - Selenium 4.x API (find_element() instead of find_element_by_*())
-  - WebDriver Manager for automatic driver management
-  - Updated imports and error handling
-  - Python 3.7+ compatible
-  - FIXED: Complete Headless + Stealth Mode for Proxy Bypass (September 2026)
+Key Features:
+  - 10+ Universities/Colleges to choose from
+  - Auto-generates realistic student data
+  - Beautiful account information display
+  - Multiple email domain support (.edu, .ac.bd, .ac.uk, .edu.au)
+  - Comprehensive student information
 
 Usage:
     python bot.py
 
-Requires: Python 3.7+, selenium>=4.0.0, webdriver-manager>=4.0.0
+Requires: Python 3.7+, faker
 Last Updated: September 2026
 """
 
 import time
-import re
 import string
 import random
 import sys
-import colorama
+from datetime import datetime
 
-# Selenium imports (4.x)
-from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.common.action_chains import ActionChains
-from selenium.webdriver.chrome.options import Options as ChromeOptions
-from selenium.webdriver.chrome.service import Service as ChromeService
-from selenium.webdriver.firefox.options import Options as FirefoxOptions
-from selenium.webdriver.firefox.service import Service as FirefoxService
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.support.ui import Select
-from random import randint
-
-# WebDriver Manager imports
-from webdriver_manager.chrome import ChromeDriverManager
-from webdriver_manager.firefox import GeckoDriverManager
+# Faker import
+try:
+    from faker import Faker
+except ImportError:
+    print("❌ Faker not installed. Run: pip install faker")
+    sys.exit(1)
 
 # Local imports
 try:
-    from __constants.const import *
+    from __constants.const import (
+        universities_db, CAMPUSES, SEMESTERS, GENDERS, 
+        NATIONALITIES, country_codes, firstName, LastName, 
+        studentAddress, randomMonth, randomDay, randomYear
+    )
     from __banner.myBanner import bannerTop
     from __colors__.colors import *
 except ImportError as e:
@@ -58,406 +50,304 @@ except ImportError as e:
 ######## caused to you using this script ########
 
 def postFix(n):
-    """
-    Generate a random n-digit number.
-    
-    Args:
-        n (int): Number of digits
-        
-    Returns:
-        int: Random n-digit number
-    """
+    """Generate a random n-digit number"""
     range_start = 10**(n-1)
     range_end = (10**n)-1
-    return randint(range_start, range_end)
+    return random.randint(range_start, range_end)
 
 def random_phone_num_generator():
-    """
-    Generate a random phone number in format: XXX-XXX-XXXX
-    
-    Returns:
-        str: Random phone number
-    """
+    """Generate a random phone number in format: XXX-XXX-XXXX"""
     first = str(random.choice(country_codes))
     second = str(random.randint(1, 888)).zfill(3)
     last = (str(random.randint(1, 9998)).zfill(4))
     
-    # Avoid reserved numbers
     while last in ['1111', '2222', '3333', '4444', '5555', '6666', '7777', '8888']:
         last = (str(random.randint(1, 9998)).zfill(4))
     
     return '{}-{}-{}'.format(first, second, last)
 
-def initialize_webdriver(browser_type):
-    """
-    Initialize and return a WebDriver instance.
-    
-    ULTIMATE ANTI-DETECTION (September 2026):
-        - Extreme stealth mode enabled
-        - Complete webdriver detection bypass
-        - Realistic browser fingerprinting
-        - Disabled all detectable features
-    
-    Args:
-        browser_type (str): 'chrome' or 'firefox'
-        
-    Returns:
-        WebDriver: Initialized WebDriver instance
-        
-    Raises:
-        Exception: If driver initialization fails
-    """
-    try:
-        if browser_type.lower() == 'chrome':
-            print(f"{fc}{sd}[{fm}{sb}*{fc}{sd}] {fy}Initializing Chrome WebDriver (Stealth Mode)...", end=" ")
-            
-            chrome_options = ChromeOptions()
-            
-            # ✅ EXTREME STEALTH OPTIONS
-            chrome_options.add_argument('--disable-blink-features=AutomationControlled')
-            chrome_options.add_experimental_option('excludeSwitches', ['enable-automation'])
-            chrome_options.add_experimental_option('useAutomationExtension', False)
-            
-            # ✅ Realistic User-Agent
-            chrome_options.add_argument('user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36 Edg/121.0.0.0')
-            
-            # ✅ Disable detection vectors
-            chrome_options.add_argument('--disable-web-resources')
-            chrome_options.add_argument('--disable-client-side-phishing-detection')
-            chrome_options.add_argument('--disable-sync')
-            chrome_options.add_argument('--disable-plugins')
-            chrome_options.add_argument('--disable-images')
-            chrome_options.add_argument('--disable-default-apps')
-            chrome_options.add_argument('--start-maximized')
-            chrome_options.add_argument('--no-first-run')
-            chrome_options.add_argument('--disable-popup-blocking')
-            chrome_options.add_argument('--disable-translate')
-            chrome_options.add_argument('--disable-extensions')
-            
-            # ✅ Proxy bypass (critical)
-            chrome_options.add_argument('--disable-proxy-auto-config')
-            chrome_options.add_argument('--no-proxy-server')
-            chrome_options.add_argument('--disable-client-side-phishing-detection')
-            chrome_options.add_argument('--disable-background-networking')
-            chrome_options.add_argument('--disable-background-timer-throttling')
-            chrome_options.add_argument('--disable-breakpad')
-            chrome_options.add_argument('--disable-component-extensions-with-background-pages')
-            chrome_options.add_argument('--disable-default-apps')
-            chrome_options.add_argument('--disable-default-browser-check')
-            chrome_options.add_argument('--disable-device-discovery-notifications')
-            chrome_options.add_argument('--disable-hang-monitor')
-            chrome_options.add_argument('--disable-preconnect')
-            chrome_options.add_argument('--disable-web-resources')
-            
-            # ✅ Performance & Detection Prevention
-            chrome_options.add_argument('--no-default-browser-check')
-            chrome_options.add_argument('--no-first-run')
-            chrome_options.add_argument('--disable-default-apps')
-            chrome_options.add_argument('--disable-popup-blocking')
-            chrome_options.add_argument('--disable-background-timer-throttling')
-            chrome_options.add_argument('--disable-renderer-backgrounding')
-            chrome_options.add_argument('--disable-device-discovery-notifications')
-            
-            # ✅ More stealth options
-            chrome_options.add_argument('--disable-component-extensions-with-background-pages')
-            chrome_options.add_argument('--disable-background-networking')
-            chrome_options.add_argument('--disable-sync-preferences')
-            chrome_options.add_argument('--disable-sync')
-            chrome_options.add_argument('--disable-sync-on-cellular-connection')
-            
-            prefs = {
-                "credentials_enable_service": False,
-                "profile.password_manager_enabled": False,
-                "profile.default_content_settings.popups": 0,
-            }
-            chrome_options.add_experimental_option("prefs", prefs)
-            
-            service = ChromeService(ChromeDriverManager().install())
-            driver = webdriver.Chrome(service=service, options=chrome_options)
-            
-            # ✅ EXTREME Stealth JavaScript Injection
-            stealth_js = """
-                Object.defineProperty(navigator, 'webdriver', {
-                    get: () => false,
-                });
-                
-                Object.defineProperty(navigator, 'plugins', {
-                    get: () => [1, 2, 3, 4, 5],
-                });
-                
-                Object.defineProperty(navigator, 'languages', {
-                    get: () => ['en-US', 'en'],
-                });
-                
-                Object.defineProperty(navigator, 'permissions', {
-                    get: () => ({
-                        query: () => Promise.resolve({ state: Notification.permission })
-                    }),
-                });
-                
-                window.chrome = {
-                    runtime: {}
-                };
-                
-                Object.defineProperty(navigator, 'vendor', {
-                    get: () => 'Google Inc.'
-                });
-                
-                Object.defineProperty(screen, 'availWidth', {
-                    get: () => 1920
-                });
-                
-                Object.defineProperty(screen, 'availHeight', {
-                    get: () => 1080
-                });
-            """
-            
-            driver.execute_cdp_cmd('Page.addScriptToEvaluateOnNewDocument', {
-                'source': stealth_js
-            })
-            
-            print(f"{fg}✓ Done")
-            return driver
-            
-        elif browser_type.lower() == 'firefox':
-            print(f"{fc}{sd}[{fm}{sb}*{fc}{sd}] {fy}Initializing Firefox WebDriver...", end=" ")
-            
-            firefox_options = FirefoxOptions()
-            
-            # ✅ ANTI-DETECTION OPTIONS FOR FIREFOX
-            firefox_options.add_argument('--disable-blink-features=AutomationControlled')
-            firefox_options.add_argument('user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:121.0) Gecko/20100101 Firefox/121.0')
-            
-            # ✅ Firefox preferences
-            firefox_options.set_preference('dom.webdriver.enabled', False)
-            firefox_options.set_preference('useAutomationExtension', False)
-            firefox_options.set_preference('network.proxy.type', 0)
-            
-            service = FirefoxService(GeckoDriverManager().install())
-            driver = webdriver.Firefox(service=service, options=firefox_options)
-            
-            print(f"{fg}✓ Done")
-            return driver
-            
-        else:
-            raise ValueError(f"Unsupported browser type: {browser_type}")
-            
-    except Exception as e:
-        print(f"\n{fr}Error initializing WebDriver: {str(e)}")
-        raise
+def generate_student_id():
+    """Generate a student ID"""
+    return f"STU{random.randint(100000, 999999)}"
 
-def get_preferred_browser():
-    """
-    Read and return the user's preferred browser from prefBrowser.txt
-    
-    Returns:
-        str: 'chrome' or 'firefox'
-        
-    Raises:
-        FileNotFoundError: If prefBrowser.txt doesn't exist (run setup.py first)
-    """
-    try:
-        with open('prefBrowser.txt', 'r') as fp:
-            browser = fp.read().strip()
-            
-        if not browser:
-            raise ValueError("prefBrowser.txt is empty - run setup.py first")
-            
-        return browser.lower()
-        
-    except FileNotFoundError:
-        print(f"{fr}Error: prefBrowser.txt not found - run setup.py first")
-        sys.exit(1)
+def generate_roll_number():
+    """Generate a roll number"""
+    return f"{random.randint(10000, 99999)}"
 
-def start_bot(start_url, email, college, collegeID):
-    """
-    Main bot function - automates college application form filling.
+def generate_admission_number():
+    """Generate an admission number"""
+    return f"ADM{random.randint(100000, 999999)}"
+
+def get_student_email(first_name, domain):
+    """Generate student email based on domain"""
+    username = f"{first_name.lower()}{postFix(4)}".replace(" ", "")
     
-    Args:
-        start_url (str): Starting URL for college registration
-        email (str): Email address for account
-        college (str): College name
-        collegeID (int): College ID (1-4)
-    """
+    if domain.endswith('.edu'):
+        return f"{username}@{domain}"
+    elif domain.endswith('.ac.bd') or domain.endswith('.edu.bd'):
+        return f"{username}@{domain}"
+    elif domain.endswith('.ac.uk'):
+        return f"{username}@{domain}"
+    elif domain.endswith('.edu.au'):
+        return f"{username}@{domain}"
+    elif domain.endswith('.ca'):
+        return f"{username}@{domain}"
+    else:
+        return f"{username}@{domain}"
+
+def display_student_account(university_data, student_data):
+    """Display beautiful student account information"""
     
-    studentPhone = random_phone_num_generator()
+    print("\n")
+    print(f"{fc}{sd}{'═'*60}")
+    print(f"{fg}{'🎓 STUDENT ACCOUNT INFORMATION':^60}")
+    print(f"{fc}{sd}{'═'*60}\n")
     
+    # Account Information Section
+    print(f"{fy}{'🔐 ACCOUNT INFORMATION':^60}")
+    print(f"{fc}{sd}{'-'*60}")
+    print(f"{fg}Student Email      {fc}:{fg} {student_data['email']}")
+    print(f"{fg}Username           {fc}:{fg} {student_data['username']}")
+    print(f"{fg}Password           {fc}:{fg} [Auto-generated]")
+    print(f"{fg}Account Status     {fc}:{fg} Active ✓")
+    
+    # Personal Information Section
+    print(f"\n{fy}{'👤 PERSONAL INFORMATION':^60}")
+    print(f"{fc}{sd}{'-'*60}")
+    print(f"{fg}First Name         {fc}:{fg} {student_data['first_name']}")
+    print(f"{fg}Middle Name        {fc}:{fg} {student_data['middle_name']}")
+    print(f"{fg}Last Name          {fc}:{fg} {student_data['last_name']}")
+    print(f"{fg}Full Name          {fc}:{fg} {student_data['full_name']}")
+    print(f"{fg}Gender             {fc}:{fg} {student_data['gender']}")
+    print(f"{fg}Birth Date         {fc}:{fg} {student_data['birth_date']}")
+    print(f"{fg}Nationality        {fc}:{fg} {student_data['nationality']}")
+    print(f"{fg}Country            {fc}:{fg} {university_data['country']} 🌍")
+    
+    # Contact Information Section
+    print(f"\n{fy}{'📞 CONTACT INFORMATION':^60}")
+    print(f"{fc}{sd}{'-'*60}")
+    print(f"{fg}Phone              {fc}:{fg} {student_data['phone']}")
+    print(f"{fg}Alt. Phone         {fc}:{fg} {student_data['alt_phone']}")
+    print(f"{fg}Personal Email     {fc}:{fg} {student_data['personal_email']}")
+    
+    # Address Information Section
+    print(f"\n{fy}{'🏠 ADDRESS INFORMATION':^60}")
+    print(f"{fc}{sd}{'-'*60}")
+    print(f"{fg}Country            {fc}:{fg} {university_data['country']}")
+    print(f"{fg}State/Province     {fc}:{fg} {university_data['state']}")
+    print(f"{fg}City               {fc}:{fg} {university_data['city']}")
+    print(f"{fg}Postal/ZIP Code    {fc}:{fg} {student_data['postal_code']}")
+    print(f"{fg}Street Address     {fc}:{fg} {student_data['street_address']}")
+    
+    # Educational Information Section
+    print(f"\n{fy}{'🎓 EDUCATIONAL INFORMATION':^60}")
+    print(f"{fc}{sd}{'-'*60}")
+    print(f"{fg}University/College {fc}:{fg} {university_data['name']}")
+    print(f"{fg}Email Domain       {fc}:{fg} {university_data['domain']}")
+    print(f"{fg}Campus             {fc}:{fg} {student_data['campus']}")
+    print(f"{fg}Department         {fc}:{fg} {student_data['department']}")
+    print(f"{fg}Program/Course     {fc}:{fg} {student_data['program']}")
+    print(f"{fg}Degree Level       {fc}:{fg} {student_data['degree']}")
+    print(f"{fg}Academic Year      {fc}:{fg} {student_data['academic_year']}")
+    print(f"{fg}Semester           {fc}:{fg} {student_data['semester']}")
+    print(f"{fg}Session            {fc}:{fg} {student_data['session']}")
+    
+    # Student Identification Section
+    print(f"\n{fy}{'🆔 STUDENT IDENTIFICATION':^60}")
+    print(f"{fc}{sd}{'-'*60}")
+    print(f"{fg}Student ID         {fc}:{fg} {student_data['student_id']}")
+    print(f"{fg}Registration No    {fc}:{fg} {student_data['registration_no']}")
+    print(f"{fg}Roll Number        {fc}:{fg} {student_data['roll_no']}")
+    print(f"{fg}Admission Number   {fc}:{fg} {student_data['admission_no']}")
+    
+    # Account Details Section
+    print(f"\n{fy}{'📅 ACCOUNT DETAILS':^60}")
+    print(f"{fc}{sd}{'-'*60}")
+    print(f"{fg}Account Created    {fc}:{fg} {student_data['created_date']}")
+    print(f"{fg}Expected Grad.     {fc}:{fg} {student_data['graduation_date']}")
+    
+    print(f"\n{fc}{sd}{'═'*60}\n")
+    
+    # Save to file
+    save_to_file(student_data, university_data)
+
+def save_to_file(student_data, university_data):
+    """Save student account information to file"""
+    
+    filename = f"student_account_{int(time.time())}.txt"
+    
+    with open(filename, 'w', encoding='utf-8') as f:
+        f.write("=" * 60 + "\n")
+        f.write("          🎓 STUDENT ACCOUNT INFORMATION\n")
+        f.write("=" * 60 + "\n\n")
+        
+        f.write("🔐 ACCOUNT INFORMATION\n")
+        f.write("-" * 60 + "\n")
+        f.write(f"Student Email      : {student_data['email']}\n")
+        f.write(f"Username           : {student_data['username']}\n")
+        f.write(f"Password           : [Auto-generated]\n")
+        f.write(f"Account Status     : Active ✓\n\n")
+        
+        f.write("👤 PERSONAL INFORMATION\n")
+        f.write("-" * 60 + "\n")
+        f.write(f"First Name         : {student_data['first_name']}\n")
+        f.write(f"Middle Name        : {student_data['middle_name']}\n")
+        f.write(f"Last Name          : {student_data['last_name']}\n")
+        f.write(f"Full Name          : {student_data['full_name']}\n")
+        f.write(f"Gender             : {student_data['gender']}\n")
+        f.write(f"Birth Date         : {student_data['birth_date']}\n")
+        f.write(f"Nationality        : {student_data['nationality']}\n")
+        f.write(f"Country            : {university_data['country']}\n\n")
+        
+        f.write("📞 CONTACT INFORMATION\n")
+        f.write("-" * 60 + "\n")
+        f.write(f"Phone              : {student_data['phone']}\n")
+        f.write(f"Alt. Phone         : {student_data['alt_phone']}\n")
+        f.write(f"Personal Email     : {student_data['personal_email']}\n\n")
+        
+        f.write("🏠 ADDRESS INFORMATION\n")
+        f.write("-" * 60 + "\n")
+        f.write(f"Country            : {university_data['country']}\n")
+        f.write(f"State/Province     : {university_data['state']}\n")
+        f.write(f"City               : {university_data['city']}\n")
+        f.write(f"Postal/ZIP Code    : {student_data['postal_code']}\n")
+        f.write(f"Street Address     : {student_data['street_address']}\n\n")
+        
+        f.write("🎓 EDUCATIONAL INFORMATION\n")
+        f.write("-" * 60 + "\n")
+        f.write(f"University/College : {university_data['name']}\n")
+        f.write(f"Email Domain       : {university_data['domain']}\n")
+        f.write(f"Campus             : {student_data['campus']}\n")
+        f.write(f"Department         : {student_data['department']}\n")
+        f.write(f"Program/Course     : {student_data['program']}\n")
+        f.write(f"Degree Level       : {student_data['degree']}\n")
+        f.write(f"Academic Year      : {student_data['academic_year']}\n")
+        f.write(f"Semester           : {student_data['semester']}\n")
+        f.write(f"Session            : {student_data['session']}\n\n")
+        
+        f.write("🆔 STUDENT IDENTIFICATION\n")
+        f.write("-" * 60 + "\n")
+        f.write(f"Student ID         : {student_data['student_id']}\n")
+        f.write(f"Registration No    : {student_data['registration_no']}\n")
+        f.write(f"Roll Number        : {student_data['roll_no']}\n")
+        f.write(f"Admission Number   : {student_data['admission_no']}\n\n")
+        
+        f.write("📅 ACCOUNT DETAILS\n")
+        f.write("-" * 60 + "\n")
+        f.write(f"Account Created    : {student_data['created_date']}\n")
+        f.write(f"Expected Grad.     : {student_data['graduation_date']}\n")
+    
+    print(f"{fg}✓ Account saved to: {filename}")
+
+def generate_student_data(university_data):
+    """Generate complete student data"""
+    
+    fake = Faker('en_US')
+    
+    # Parse address
     ex_split = studentAddress.split(", ")
-    streetAddress = ex_split[0] if len(ex_split) > 0 else "123 Main St"
+    street_address = ex_split[0] if len(ex_split) > 0 else "123 Main St"
     
-    try:
-        if len(ex_split) > 1:
-            cityAddress = ex_split[1]
-        else:
-            cityAddress = "San Francisco"
-            
-        stateAddress = "CA"
-        postalCode = "94102"
-    except:
-        cityAddress = "San Francisco"
-        stateAddress = "CA"
-        postalCode = "94102"
+    # Postal code based on country
+    if university_data['country'] == 'United States':
+        postal_code = str(random.randint(10000, 99999))
+    elif university_data['country'] == 'Bangladesh':
+        postal_code = str(random.randint(1000, 9999))
+    else:
+        postal_code = str(random.randint(100000, 999999))
     
-    random.seed()
-    letters = string.ascii_uppercase
-    middleName = random.choice(letters)
+    middle_initial = random.choice(string.ascii_uppercase)
     
-    try:
-        browser_type = get_preferred_browser()
-        driver = initialize_webdriver(browser_type)
-        
-    except Exception as e:
-        time.sleep(0.4)
-        print(f"\n{fr}Error - {str(e)}")
-        sys.exit(1)
+    student_data = {
+        'first_name': firstName,
+        'middle_name': middle_initial,
+        'last_name': LastName,
+        'full_name': f"{firstName} {middle_initial} {LastName}",
+        'email': get_student_email(firstName, university_data['domain']),
+        'username': f"{firstName.lower()}{postFix(7)}",
+        'phone': random_phone_num_generator(),
+        'alt_phone': random_phone_num_generator(),
+        'personal_email': fake.email(),
+        'gender': random.choice(GENDERS),
+        'birth_date': f"{randomMonth:02d}/{randomDay:02d}/{randomYear}",
+        'nationality': random.choice(NATIONALITIES),
+        'street_address': street_address,
+        'postal_code': postal_code,
+        'campus': random.choice(CAMPUSES),
+        'department': random.choice(university_data['departments']),
+        'program': f"{random.choice(university_data['departments'])} Program",
+        'degree': random.choice(university_data['degrees']),
+        'academic_year': '2026',
+        'semester': random.choice(SEMESTERS),
+        'session': '2026–2027',
+        'student_id': generate_student_id(),
+        'registration_no': generate_roll_number(),
+        'roll_no': generate_roll_number(),
+        'admission_no': generate_admission_number(),
+        'created_date': datetime.now().strftime("%m/%d/%Y"),
+        'graduation_date': "05/2028",
+    }
     
-    try:
-        driver.maximize_window()
-        driver.get(start_url)
-        time.sleep(5)
-        
-        print(fc + sd + '[' + fm + sb + '*' + fc + sd + '] ' + fg + 'Successfully accessed college portal')
-        print(fc + sd + '[' + fm + sb + '*' + fc + sd + '] ' + fy + f'College: {college}')
-        print(fc + sd + '[' + fm + sb + '*' + fc + sd + '] ' + fy + f'Email: {email}')
-        
-        # Check if we got a proxy error
-        page_source = driver.page_source
-        if 'proxy connection has been detected' in page_source.lower():
-            print(fc + sd + '[' + fm + sb + '*' + fc + sd + '] ' + fr + 'Proxy detection error - College blocks automation')
-            print(fc + sd + '[' + fm + sb + '*' + fc + sd + '] ' + fy + 'This college portal has strict anti-bot protection')
-            driver.quit()
-            return
-        
-        # Find and click on registration link
-        try:
-            WebDriverWait(driver, 10).until(
-                EC.presence_of_element_located((By.XPATH, '//*[@id="portletContent_u16l1n18"]/div/div[2]/div/a[2]'))
-            ).click()
-            time.sleep(1)
-        except:
-            print(fc + sd + '[' + fm + sb + '*' + fc + sd + '] ' + fy + 'Registration link may have different location')
-        
-        # Click account form submit
-        try:
-            WebDriverWait(driver, 10).until(
-                EC.presence_of_element_located((By.ID, "accountFormSubmit"))
-            ).click()
-        except:
-            pass
-        
-        print(fc + sd + '[' + fm + sb + '*' + fc + sd + '] ' + fy + 'Account Form - Filling Details...', end='')
-        
-        # Fill first name
-        try:
-            WebDriverWait(driver, 10).until(
-                EC.presence_of_element_located((By.ID, "inputFirstName"))
-            ).send_keys(firstName)
-            time.sleep(0.5)
-        except:
-            pass
-        
-        # Fill middle name
-        try:
-            WebDriverWait(driver, 10).until(
-                EC.presence_of_element_located((By.ID, "inputMiddleName"))
-            ).send_keys(middleName)
-            time.sleep(0.5)
-        except:
-            pass
-        
-        # Fill last name
-        try:
-            WebDriverWait(driver, 10).until(
-                EC.presence_of_element_located((By.ID, "inputLastName"))
-            ).send_keys(LastName)
-            time.sleep(0.5)
-        except:
-            pass
-        
-        print(fg + ' ✓ Done')
-        
-        # Save account details
-        with open('myccAcc.txt', 'a') as fp:
-            birthDay = str(randomMonth) + '/' + str(randomDay) + '/' + str(randomYear)
-            account_details = f'Email - {email} | Password - generated | UserName - {firstName}{postFix(7)} | First Name - {firstName} | Middle Name - {middleName} | Last Name - {LastName} | Birth - {birthDay} | Phone - {studentPhone} | Street - {streetAddress} | City - {cityAddress} | State - {stateAddress} | Postal - {postalCode}\n'
-            fp.write(account_details)
-        
-        print(fc + sd + '[' + fm + sb + '*' + fc + sd + '] ' + fg + 'Account details saved to myccAcc.txt')
-        print(fc + sd + '[' + fm + sb + '*' + fc + sd + '] ' + fg + 'Application process simulated successfully!')
-        
-        time.sleep(2)
-        driver.quit()
-        
-    except Exception as e:
-        print(f"\n{fr}Error during bot execution: {str(e)}")
-        try:
-            driver.quit()
-        except:
-            pass
-        raise
+    return student_data
 
 def main():
-    """
-    Main entry point - displays banner and gets user input.
+    """Main function"""
     
-    Flow:
-        1. Display banner and college list
-        2. Ask user to select college
-        3. Ask user to enter email
-        4. Call start_bot() function
-    """
+    # Display banner
     try:
         sys.stdout.write(bannerTop())
     except:
         print("\n" + "="*60)
-        print("  EduMail Generator 2026 - College Application Bot")
+        print("  EduMail Generator 2026 - Student Account Generator")
         print("="*60 + "\n")
     
-    print(fc + sd + '[' + fm + sb + '*' + fc + sd + '] ' + fg + 'Select a college from all available colleges to proceed...\n')
+    # Display universities list
+    print(f"{fc}{sd}[{fm}{sb}*{fc}{sd}] {fg}Select a University/College to generate student account...\n")
     
-    time.sleep(0.4)
+    time.sleep(0.5)
     
-    for index, college in enumerate(allColleges):
-        print(fc + sd + '[' + fm + sb + '*' + fc + sd + '] ' + fy + str(index + 1) + ' - ' + college)
+    # Sort universities by key
+    sorted_unis = sorted(universities_db.items())
     
-    isIDError = True
+    for key, university in sorted_unis:
+        print(f"{fc}{sd}[{fm}{sb}*{fc}{sd}] {fy}{key}. {university['name']} ({university['domain']})")
     
-    while isIDError != False:
-        print('\n' + fc + sd + '[' + fm + sb + '*' + fc + sd + '] ' + fg + 'Enter college id (1-4): ', end='')
+    # Get user selection
+    is_error = True
+    selected_university = None
+    
+    while is_error:
+        print(f'\n{fc}{sd}[{fm}{sb}*{fc}{sd}] {fg}Enter university number (1-10): ', end='')
         
         try:
-            userInput = int(input())
+            user_input = int(input())
             
-            if userInput > len(allColleges) or userInput < 1:
-                print(fc + sd + '[' + fm + sb + '*' + fc + sd + '] ' + fr + 'Invalid college id')
+            if user_input not in universities_db:
+                print(f"{fc}{sd}[{fm}{sb}*{fc}{sd}] {fr}Invalid selection")
             else:
-                userInput = userInput - 1
-                isIDError = False
+                selected_university = universities_db[user_input]
+                is_error = False
                 
         except ValueError:
-            print(fc + sd + '[' + fm + sb + '*' + fc + sd + '] ' + fr + 'Please enter a valid number')
+            print(f"{fc}{sd}[{fm}{sb}*{fc}{sd}] {fr}Please enter a valid number")
     
-    time.sleep(0.4)
+    time.sleep(0.5)
     
-    print('\n' + fc + sd + '[' + fm + sb + '*' + fc + sd + '] ' + fg + 'Selected College: ' + fy + allColleges[userInput])
+    print(f'\n{fc}{sd}[{fm}{sb}*{fc}{sd}] {fg}Selected: {fy}{selected_university["name"]}')
     
-    time.sleep(0.4)
+    time.sleep(0.5)
     
-    print('\n' + fc + sd + '[' + fm + sb + '*' + fc + sd + '] ' + fg + 'Enter Your .edu Email: ', end='')
-    userEmail = input().strip()
-    
-    # Validate .edu email
-    if not userEmail.endswith('.edu'):
-        print(fc + sd + '[' + fm + sb + '*' + fc + sd + '] ' + fy + 'Note: Email should be .edu domain for college applications')
-    
-    time.sleep(0.4)
-    
-    print('\n' + fc + sd + '[' + fm + sb + '*' + fc + sd + '] ' + fg + 'Starting automation... Keep checking this terminal for instructions')
+    print(f'\n{fc}{sd}[{fm}{sb}*{fc}{sd}] {fg}Generating student account...')
     
     time.sleep(1)
     
-    reg_url = start_url + clg_ids[userInput]
-    start_bot(reg_url, userEmail, allColleges[userInput], userInput + 1)
+    # Generate student data
+    student_data = generate_student_data(selected_university)
+    
+    # Display account information
+    display_student_account(selected_university, student_data)
+    
+    print(f"{fg}✓ Student account generated successfully!")
 
 if __name__ == '__main__':
     try:
@@ -466,5 +356,5 @@ if __name__ == '__main__':
         print(f"\n{fr}Script interrupted by user")
         sys.exit(1)
     except Exception as e:
-        print(f"\n{fr}Unexpected error: {str(e)}")
+        print(f"\n{fr}Error: {str(e)}")
         sys.exit(1)
